@@ -20,13 +20,36 @@ window.onload = () ->
     level = window.level = {
         width: 16
         height: 16
-        data:[true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,0,0,0,0,0,0,0,0,0,0,0,0,0,0,true,true,0,true,true,true,true,true,0,true,0,true,true,true,true,0,true,true,false,false,false,false,false,0,0,true,false,true,true,true,true,0,true,true,true,true,true,true,true,true,false,true,false,true,true,true,true,0,true,true,false,false,0,false,0,true,false,true,false,false,0,false,false,0,true,true,true,true,0,true,true,true,false,true,true,true,true,true,true,false,true,true,false,false,0,false,false,false,false,0,0,false,0,0,false,0,true,true,true,true,0,true,true,true,false,true,0,true,true,true,true,true,true,true,false,false,0,false,0,true,false,true,0,false,0,0,false,0,true,true,true,true,0,true,true,true,false,true,0,true,true,true,true,true,true,true,false,false,false,false,false,true,false,0,0,0,0,0,false,0,true,true,0,true,true,true,false,true,0,true,true,true,true,true,true,0,true,true,0,0,false,true,false,true,false,true,true,0,0,0,true,0,true,true,0,true,0,0,false,true,false,false,false,false,true,false,false,0,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,null,null,null,null,null,null,null,true,true,true,true,true]
+        data:[true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,0,0,0,0,0,0,0,0,0,0,0,0,0,0,true,true,0,true,true,true,true,true,0,true,0,true,true,true,true,0,true,true,false,false,false,false,false,0,0,true,false,true,true,true,true,0,true,true,false,true,true,true,true,true,false,true,false,true,true,true,true,0,true,true,false,false,0,false,0,false,false,true,false,false,0,false,false,0,true,true,true,true,0,true,true,true,false,true,true,true,true,true,true,false,true,true,false,false,0,false,false,false,false,0,0,false,0,0,false,false,true,true,false,true,0,true,true,true,false,true,0,true,true,true,true,false,true,true,false,false,0,false,0,false,false,true,0,false,0,0,false,0,true,true,true,true,0,true,true,true,false,true,0,true,true,true,true,true,true,true,false,false,false,false,false,true,false,0,0,0,0,0,false,0,true,true,0,true,true,true,false,true,0,true,true,true,true,true,true,0,true,true,0,0,false,true,false,true,false,true,true,0,0,0,true,0,true,true,true,true,0,0,false,true,false,false,false,false,true,false,false,0,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,null,null,null,null,null,null,null,true,true,true,true,true]
     }
 
     player = {x: 7, y: 7}
 
-    paths = pathSearch player, level
-    console.log paths
+    victims = []
+    for x in [0...7]
+        victims.push randomVictim(victims, level)
+
+    update = () ->
+        paths = pathSearch player, level
+        i = 0
+        while i < victims.length
+            victim = victims[i]
+            if paths[victim.y * level.width + victim.x] < 8
+                pt = escapeRoute(level, paths, victim)
+                {x:victim.x, y:victim.y} = pt if pt? and not isColliding(pt, victims, level)
+            i += 1
+        
+    updatePlayer = () ->
+        paths = pathSearch {x:Math.floor(mouse.x*tw), y:Math.floor(mouse.y*tw)}, level
+        pt = chaseRoute(level, paths, player)
+        {x:player.x, y:player.y} = pt if pt? and not isColliding(pt, [], level)
+        i = 0
+        while i < victims.length
+            victim = victims[i]
+            if player.x == victim.x and player.y == victim.y
+                victims.splice(i, 1)
+                continue
+            i += 1
 
     mouse = {x: 0, y: 0, down:false}
     canvas.onmousemove = (ev) ->
@@ -45,9 +68,8 @@ window.onload = () ->
             y = Math.floor(mouse.y * tw)
             level.data[y * tw + x] = not ev.shiftKey
 
-        player.x = Math.min(Math.max(Math.floor(mouse.x * tw), 0), tw-1)
-        player.y = Math.min(Math.max(Math.floor(mouse.y * tw), 0), tw-1)
-        
+        #player.x = Math.min(Math.max(Math.floor(mouse.x * tw), 0), tw-1)
+        #player.y = Math.min(Math.max(Math.floor(mouse.y * tw), 0), tw-1)
 
     canvas.onmousedown = () ->
         mouse.down = true
@@ -73,35 +95,36 @@ window.onload = () ->
                 if level.data[y * tw + x]
                     ctx.fillRect x/tw, y/tw, 1/tw, 1/tw
 
-        paths = pathSearch player, level
-        for x in [0...tw]
-            for y in [0...tw]
-                if paths[y * tw + x] != null
-                    ctx.fillStyle = "rgb(0, 0, #{Math.floor paths[y * tw + x]*10})"
-                    ctx.fillRect x/tw, y/tw, 1/tw, 1/tw
+        if debugPathSearch?
+            paths = pathSearch player, level
+            for x in [0...tw]
+                for y in [0...tw]
+                    if paths[y * tw + x] != null
+                        ctx.fillStyle = "rgb(0, 0, #{Math.floor paths[y * tw + x]*10})"
+                        ctx.fillRect x/tw, y/tw, 1/tw, 1/tw
+
+        ctx.fillStyle = 'red'
+        ctx.beginPath()
+        ctx.arc((player.x+0.5)/tw, (player.y+0.5)/tw, 0.25/tw, 0, Math.PI*2, true)
+        ctx.fill()
+
+        ctx.fillStyle = 'yellow'
+        for victim in victims
+            {x, y} = victim
+            ctx.beginPath()
+            ctx.arc((x+0.5)/tw, (y+0.5)/tw, 0.25/2/tw, 0, Math.PI*2, true)
+            ctx.fill()
+            
         ctx.fillStyle = 'white'
 
-        ctx.fillRect (player.x+0.25)/tw, (player.y+0.25)/tw, 0.5/tw, 0.5/tw
+        ctx.beginPath()
+        ctx.arc(mouse.x, mouse.y, 0.05/tw, 0, Math.PI*2, false)
+        ctx.fill()
 
-        x = 14
-        y = 7
-        ctx.fillRect (x+0.5-0.25/2)/tw, (y+0.5-0.25/2)/tw, 0.25/tw, 0.25/tw
-
-        pt = chaseRoute(level, paths, {x: 14, y: 7})
-        if pt?
-            ctx.fillStyle = 'red'
-            {x, y} = pt
-            ctx.fillRect (x+0.5-0.25/2)/tw, (y+0.5-0.25/2)/tw, 0.25/tw, 0.25/tw
-
-        pt = escapeRoute(level, paths, {x: 14, y: 7})
-        if pt?
-            ctx.fillStyle = 'green'
-            {x, y} = pt
-            ctx.fillRect (x+0.5-0.25/2)/tw, (y+0.5-0.25/2)/tw, 0.25/tw, 0.25/tw
-
-        ctx.fillRect mouse.x, mouse.y, 0.5/tw + 0.25/tw*mouse.down, 0.5/tw
         ctx.restore()
         requestAnimationFrame draw
+    setInterval update, 1000/6.0
+    setInterval updatePlayer, 1000/8.0
     draw()
 
     window.canvas = canvas
@@ -118,6 +141,18 @@ randomLevel = (width, height) ->
         for y in [0...height]
             o.push (Math.random() > 0.7)*1
     return {width, height, data:o}
+
+randomVictim = (victims, level) ->
+    x = y = 0
+    while isColliding({x, y}, victims, level)
+        x = Math.floor(Math.random()*level.width)
+        y = Math.floor(Math.random()*level.height)
+    return {x, y}
+
+isColliding = (point, victims, level) ->
+    for victim in victims
+        return true if victim.x == point.x and victim.y == point.y
+    return level.data[point.y * level.width + point.x]
 
 pathSearch = (point, level) ->
     o = (null for i in [0...level.width*level.height])
@@ -140,10 +175,15 @@ pathSearch = (point, level) ->
     return o
 
 chaseRoute = (level, paths, point) ->
-    return selectRoute(level, paths, point, ((b, a) -> a.d - b.d))
+    edges = selectRoute level, paths, point, (coord, d) ->
+        return paths[coord point.x, point.y] > d
+    edges.sort (a, b) -> a.d - b.d
+    return edges[0]
 
 escapeRoute = (level, paths, point) ->
-    return selectRoute(level, paths, point, ((a, b) -> a.d - b.d))
+    edges = selectRoute level, paths, point, (coord, d) ->
+        return paths[coord point.x, point.y] < d
+    return edges[Math.floor(Math.random()*edges.length)]
 
 selectRoute = (level, paths, point, fn) ->
     edges = []
@@ -151,11 +191,10 @@ selectRoute = (level, paths, point, fn) ->
     visit = (x, y) ->
         return if x < 0 or level.width <= x or y < 0 or level.height <= y
         if paths[coord x, y]?
-            edges.push {x, y, d:paths[coord x, y]}
-
+            d = paths[coord x, y]
+            edges.push {x, y, d} if fn(coord, d)
     visit(point.x-1, point.y+0)
     visit(point.x+1, point.y+0)
     visit(point.x+0, point.y+1)
     visit(point.x+0, point.y-1)
-    edges.sort(fn)
-    return edges[0]
+    return edges
