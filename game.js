@@ -3,7 +3,7 @@
   var chaseRoute, escapeRoute, isColliding, pathSearch, randomLevel, randomVictim, resizeCanvas, selectRoute;
 
   window.onload = function() {
-    var canvas, ctx, draw, level, mouse, player, tw, update, updatePlayer, victims, x, _i;
+    var canvas, ctx, draw, level, level_index, levels, mouse, nextLevel, player, tw, update, updatePlayer, victims, x, _i, _ref;
     document.body.style.background = "black";
     canvas = document.createElement('canvas');
     canvas.style.position = "absolute";
@@ -18,20 +18,63 @@
     };
     ctx = canvas.getContext('2d');
     tw = 16;
-    level = window.level = randomLevel(16, 16);
-    level = window.level = {
-      width: 16,
-      height: 16,
-      data: [true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true, true, 0, true, true, true, true, true, 0, true, 0, true, true, true, true, 0, true, true, false, false, false, false, false, 0, 0, true, false, true, true, true, true, 0, true, true, false, true, true, true, true, true, false, true, false, true, true, true, true, 0, true, true, false, false, 0, false, 0, false, false, true, false, false, 0, false, false, 0, true, true, true, true, 0, true, true, true, false, true, true, true, true, true, true, false, true, true, false, false, 0, false, false, false, false, 0, 0, false, 0, 0, false, false, true, true, false, true, 0, true, true, true, false, true, 0, true, true, true, true, false, true, true, false, false, 0, false, 0, false, false, true, 0, false, 0, 0, false, 0, true, true, true, true, 0, true, true, true, false, true, 0, true, true, true, true, true, true, true, false, false, false, false, false, true, false, 0, 0, 0, 0, 0, false, 0, true, true, 0, true, true, true, false, true, 0, true, true, true, true, true, true, 0, true, true, 0, 0, false, true, false, true, false, true, true, 0, 0, 0, true, 0, true, true, true, true, 0, 0, false, true, false, false, false, false, true, false, false, 0, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, null, null, null, null, null, null, null, true, true, true, true, true]
-    };
+    levels = [
+      {
+        width: 16,
+        height: 16,
+        data: [true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, false, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, false, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, false, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, false, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, false, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, false, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, false, true, true, true, true, true, false, false, 0, false, 0, 0, false, false, true, true, false, true, true, true, true, true, true, true, true, true, true, true, true, false, true, true, false, true, true, true, true, true, true, true, true, true, true, true, true, false, true, true, false, true, true, true, true, true, true, true, true, true, true, true, true, false, true, true, false, true, true, true, true, true, true, true, true, true, true, true, true, 0, true, true, 0, true, true, true, true, true, true, true, true, true, true, true, true, 0, true, true, 0, true, true, true, true, true, true, true, true, true, true, true, true, 0, true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, 0, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, null, null, null, null, null, null, null, true, true, true, true, true],
+        victims: 1
+      }, {
+        width: 16,
+        height: 16,
+        data: [true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, 0, 0, 0, 0, true, 0, 0, 0, 0, 0, 0, 0, 0, 0, true, true, 0, true, true, true, true, false, true, true, true, false, true, true, true, 0, true, true, false, false, false, false, false, false, 0, false, true, false, false, false, true, false, true, true, false, true, true, true, true, true, true, true, true, true, true, true, true, false, true, true, false, false, false, false, 0, false, false, false, false, false, 0, false, true, 0, true, true, true, true, true, true, true, true, true, true, true, true, true, false, true, false, true, true, false, false, 0, false, false, false, false, false, 0, false, 0, false, true, false, true, true, false, true, true, true, true, true, true, true, true, true, true, true, true, false, true, true, false, false, false, false, false, false, false, false, false, false, false, false, true, 0, true, true, true, true, true, true, true, true, true, true, true, true, true, false, true, false, true, true, false, false, false, false, false, false, false, false, false, false, false, false, true, false, true, true, 0, true, true, true, true, true, true, true, true, true, true, true, true, false, true, true, 0, true, false, false, false, true, false, false, false, true, false, false, false, false, true, true, false, false, false, true, false, false, false, true, false, false, false, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, null, null, null, null, null, null, null, true, true, true, true, true],
+        victims: 4
+      }, {
+        width: 16,
+        height: 16,
+        data: [true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true, true, 0, true, true, false, false, false, false, false, false, false, false, false, true, 0, true, true, false, true, true, true, true, true, false, true, true, true, true, false, true, 0, true, true, false, false, false, false, false, false, false, false, false, false, true, false, true, 0, true, true, false, false, true, false, true, true, true, true, true, false, true, false, true, 0, true, true, true, false, true, false, true, false, false, false, true, false, true, false, true, false, true, true, false, false, true, false, false, false, false, false, false, false, true, false, true, false, true, true, false, true, true, false, true, false, false, false, true, false, true, false, true, false, true, true, false, false, true, false, true, true, true, true, true, false, true, false, false, 0, true, true, true, false, true, false, false, false, false, false, false, false, true, false, true, true, true, true, false, false, true, true, true, true, true, true, false, true, true, false, false, 0, true, true, true, false, false, false, false, false, false, false, false, false, true, false, true, 0, true, true, 0, 0, false, true, false, true, false, true, true, 0, false, 0, true, 0, true, true, true, true, 0, 0, false, true, false, false, false, false, true, false, false, 0, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, null, null, null, null, null, null, null, true, true, true, true, true],
+        victims: 10
+      }, {
+        width: 16,
+        height: 16,
+        data: [true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true, true, 0, true, true, true, true, true, 0, true, 0, true, true, true, true, 0, true, true, false, false, false, false, false, 0, 0, true, false, true, true, true, true, 0, true, true, false, true, true, true, true, true, false, true, false, true, true, true, true, 0, true, true, false, false, 0, false, 0, false, false, true, false, false, 0, false, false, 0, true, true, true, true, 0, true, true, true, false, true, true, true, true, true, true, false, true, true, false, false, 0, false, false, false, false, 0, 0, false, 0, 0, false, false, true, true, false, true, 0, true, true, true, false, true, 0, true, true, true, true, false, true, true, false, false, 0, false, 0, false, false, true, 0, false, 0, 0, false, 0, true, true, true, true, 0, true, true, true, false, true, 0, true, true, true, true, true, true, true, false, false, false, false, false, true, false, 0, 0, 0, 0, 0, false, 0, true, true, 0, true, true, true, false, true, 0, true, true, true, true, true, true, 0, true, true, 0, 0, false, true, false, true, false, true, true, 0, 0, 0, true, 0, true, true, true, true, 0, 0, false, true, false, false, false, false, true, false, false, 0, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, null, null, null, null, null, null, null, true, true, true, true, true],
+        victims: 7
+      }, {
+        width: 16,
+        height: 16,
+        data: [true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, false, false, false, false, false, false, false, false, false, true, false, false, false, false, true, true, false, true, true, true, true, true, true, false, true, true, true, true, true, false, true, true, false, false, true, false, false, false, false, false, true, false, false, false, true, false, true, true, false, true, true, false, true, true, true, true, true, true, true, false, true, false, true, true, false, true, true, false, false, false, false, false, true, false, false, false, true, false, true, true, false, true, true, true, true, true, true, false, true, false, true, true, true, false, true, true, false, true, true, false, false, false, false, false, true, false, true, false, false, false, true, true, false, true, true, false, true, true, true, true, true, false, true, true, true, true, true, true, false, true, true, false, true, false, false, false, false, false, false, false, false, false, true, true, false, true, true, false, true, true, true, true, true, false, true, true, true, false, true, true, false, true, true, false, false, false, false, false, true, false, true, false, true, false, true, true, false, true, true, true, true, true, true, false, true, false, false, false, true, false, true, true, false, false, false, false, false, false, true, false, true, true, true, true, true, false, true, true, true, false, true, false, true, false, true, false, false, false, false, false, false, false, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, null, null, null, null, null, null, null, true, true, true, true, true],
+        victims: 7
+      }, {
+        width: 16,
+        height: 16,
+        data: [true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true, true, 0, false, false, false, false, false, false, false, false, false, false, false, false, 0, true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, 0, true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, 0, true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, 0, true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, true, false, false, false, false, false, false, true, false, false, false, false, false, false, false, true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, 0, true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, 0, true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, 0, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, null, null, null, null, null, null, null, true, true, true, true, true],
+        victims: 20
+      }
+    ];
+    level_index = 0;
+    level = window.level = levels[0];
     player = {
       x: 7,
       y: 7
     };
     victims = [];
-    for (x = _i = 0; _i < 7; x = ++_i) {
+    for (x = _i = 0, _ref = level.victims; 0 <= _ref ? _i < _ref : _i > _ref; x = 0 <= _ref ? ++_i : --_i) {
       victims.push(randomVictim(victims, level));
     }
+    nextLevel = function(newlevel) {
+      var _j, _ref1, _results;
+      level = window.level = newlevel;
+      player = {
+        x: 7,
+        y: 7
+      };
+      victims = [];
+      _results = [];
+      for (x = _j = 0, _ref1 = level.victims; 0 <= _ref1 ? _j < _ref1 : _j > _ref1; x = 0 <= _ref1 ? ++_j : --_j) {
+        _results.push(victims.push(randomVictim(victims, level)));
+      }
+      return _results;
+    };
     update = function() {
       var i, paths, pt, victim, _results;
       paths = pathSearch(player, level);
@@ -50,7 +93,7 @@
       return _results;
     };
     updatePlayer = function() {
-      var i, paths, pt, victim, _results;
+      var i, paths, pt, victim;
       paths = pathSearch({
         x: Math.floor(mouse.x * tw),
         y: Math.floor(mouse.y * tw)
@@ -60,16 +103,18 @@
         player.x = pt.x, player.y = pt.y;
       }
       i = 0;
-      _results = [];
       while (i < victims.length) {
         victim = victims[i];
         if (player.x === victim.x && player.y === victim.y) {
           victims.splice(i, 1);
           continue;
         }
-        _results.push(i += 1);
+        i += 1;
       }
-      return _results;
+      if (victims.length === 0) {
+        level_index = (level_index + 1) % levels.length;
+        return nextLevel(levels[level_index]);
+      }
     };
     mouse = {
       x: 0,
@@ -88,7 +133,7 @@
         mouse.x = (x - (rect.width - rect.height) / 2.0) / rect.height;
         mouse.y = y / rect.height;
       }
-      if (mouse.down) {
+      if (location.hash === '#edit' && mouse.down) {
         x = Math.floor(mouse.x * tw);
         y = Math.floor(mouse.y * tw);
         return level.data[y * tw + x] = !ev.shiftKey;
@@ -149,6 +194,9 @@
       ctx.arc(mouse.x, mouse.y, 0.05 / tw, 0, Math.PI * 2, false);
       ctx.fill();
       ctx.restore();
+      ctx.fillStyle = 'white';
+      ctx.font = "20px sans-serif";
+      ctx.fillText("level " + (level_index + 1), 2, 20);
       return requestAnimationFrame(draw);
     };
     setInterval(update, 1000 / 6.0);
