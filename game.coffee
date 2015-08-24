@@ -44,7 +44,7 @@ window.onload = () ->
         {
             width: 16
             height: 16
-            data: [true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,false,false,false,false,false,false,false,false,false,true,false,false,false,false,true,true,false,true,true,true,true,true,true,false,true,true,true,true,true,false,true,true,false,false,true,false,false,false,false,false,true,false,false,false,true,false,true,true,false,true,true,false,true,true,true,true,true,true,true,false,true,false,true,true,false,true,true,false,false,false,false,false,true,false,false,false,true,false,true,true,false,true,true,true,true,true,true,false,true,false,true,true,true,false,true,true,false,true,true,false,false,false,false,false,true,false,true,false,false,false,true,true,false,true,true,false,true,true,true,true,true,false,true,true,true,true,true,true,false,true,true,false,true,false,false,false,false,false,false,false,false,false,true,true,false,true,true,false,true,true,true,true,true,false,true,true,true,false,true,true,false,true,true,false,false,false,false,false,true,false,true,false,true,false,true,true,false,true,true,true,true,true,true,false,true,false,false,false,true,false,true,true,false,false,false,false,false,false,true,false,true,true,true,true,true,false,true,true,true,false,true,false,true,false,true,false,false,false,false,false,false,false,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,null,null,null,null,null,null,null,true,true,true,true,true]
+            data: [true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,false,false,false,false,false,false,false,false,false,false,false,false,false,false,true,true,false,true,true,true,true,true,true,false,true,true,true,true,true,false,true,true,false,false,true,false,false,false,false,false,true,false,false,false,true,false,true,true,false,true,true,false,true,true,true,true,true,true,true,false,true,false,true,true,false,true,true,false,false,false,false,false,true,false,false,false,true,false,true,true,false,true,true,true,true,true,true,false,true,false,true,true,true,false,true,true,false,true,true,false,false,false,false,false,true,false,true,false,false,false,true,true,false,true,true,false,true,true,true,true,true,false,true,true,true,true,true,true,false,true,true,false,true,false,false,false,false,false,false,false,false,false,true,true,false,true,true,false,true,true,true,true,true,false,true,true,true,false,true,true,false,true,true,false,false,false,false,false,true,false,true,false,true,false,true,true,false,true,true,true,true,true,true,false,true,false,false,false,true,false,true,true,false,false,false,false,false,false,true,false,true,true,true,true,true,false,true,true,true,false,true,false,true,false,true,false,false,false,false,false,false,false,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,null,null,null,null,null,null,null,true,true,true,true,true]
             victims: 7
         }
         {
@@ -55,8 +55,8 @@ window.onload = () ->
         }
     ]
 
-    level_index = 0
-    level = window.level = levels[0]
+    level_index = 4
+    level = window.level = levels[level_index]
     player = {x: 7, y: 7}
     victims = []
     for x in [0...level.victims]
