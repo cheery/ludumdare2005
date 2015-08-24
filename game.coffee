@@ -14,20 +14,60 @@ window.onload = () ->
     window.onresize = () -> resizeCanvas canvas
 
     ctx = canvas.getContext('2d')
-
     tw = 16
-    level = window.level = randomLevel(16, 16)
-    level = window.level = {
-        width: 16
-        height: 16
-        data:[true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,0,0,0,0,0,0,0,0,0,0,0,0,0,0,true,true,0,true,true,true,true,true,0,true,0,true,true,true,true,0,true,true,false,false,false,false,false,0,0,true,false,true,true,true,true,0,true,true,false,true,true,true,true,true,false,true,false,true,true,true,true,0,true,true,false,false,0,false,0,false,false,true,false,false,0,false,false,0,true,true,true,true,0,true,true,true,false,true,true,true,true,true,true,false,true,true,false,false,0,false,false,false,false,0,0,false,0,0,false,false,true,true,false,true,0,true,true,true,false,true,0,true,true,true,true,false,true,true,false,false,0,false,0,false,false,true,0,false,0,0,false,0,true,true,true,true,0,true,true,true,false,true,0,true,true,true,true,true,true,true,false,false,false,false,false,true,false,0,0,0,0,0,false,0,true,true,0,true,true,true,false,true,0,true,true,true,true,true,true,0,true,true,0,0,false,true,false,true,false,true,true,0,0,0,true,0,true,true,true,true,0,0,false,true,false,false,false,false,true,false,false,0,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,null,null,null,null,null,null,null,true,true,true,true,true]
-    }
 
+    levels = [
+        {
+            width: 16
+            height: 16
+            data: [true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,false,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,false,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,false,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,false,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,false,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,false,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,false,true,true,true,true,true,false,false,0,false,0,0,false,false,true,true,false,true,true,true,true,true,true,true,true,true,true,true,true,false,true,true,false,true,true,true,true,true,true,true,true,true,true,true,true,false,true,true,false,true,true,true,true,true,true,true,true,true,true,true,true,false,true,true,false,true,true,true,true,true,true,true,true,true,true,true,true,0,true,true,0,true,true,true,true,true,true,true,true,true,true,true,true,0,true,true,0,true,true,true,true,true,true,true,true,true,true,true,true,0,true,true,false,false,false,false,false,false,false,false,false,false,false,false,false,0,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,null,null,null,null,null,null,null,true,true,true,true,true]
+            victims: 1
+        }
+        {
+            width: 16
+            height: 16
+            data: [true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,0,0,0,0,true,0,0,0,0,0,0,0,0,0,true,true,0,true,true,true,true,false,true,true,true,false,true,true,true,0,true,true,false,false,false,false,false,false,0,false,true,false,false,false,true,false,true,true,false,true,true,true,true,true,true,true,true,true,true,true,true,false,true,true,false,false,false,false,0,false,false,false,false,false,0,false,true,0,true,true,true,true,true,true,true,true,true,true,true,true,true,false,true,false,true,true,false,false,0,false,false,false,false,false,0,false,0,false,true,false,true,true,false,true,true,true,true,true,true,true,true,true,true,true,true,false,true,true,false,false,false,false,false,false,false,false,false,false,false,false,true,0,true,true,true,true,true,true,true,true,true,true,true,true,true,false,true,false,true,true,false,false,false,false,false,false,false,false,false,false,false,false,true,false,true,true,0,true,true,true,true,true,true,true,true,true,true,true,true,false,true,true,0,true,false,false,false,true,false,false,false,true,false,false,false,false,true,true,false,false,false,true,false,false,false,true,false,false,false,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,null,null,null,null,null,null,null,true,true,true,true,true]
+            victims: 4
+        }
+        {
+            width: 16
+            height: 16
+            data: [true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,0,0,0,0,0,0,0,0,0,0,0,0,0,0,true,true,0,true,true,false,false,false,false,false,false,false,false,false,true,0,true,true,false,true,true,true,true,true,false,true,true,true,true,false,true,0,true,true,false,false,false,false,false,false,false,false,false,false,true,false,true,0,true,true,false,false,true,false,true,true,true,true,true,false,true,false,true,0,true,true,true,false,true,false,true,false,false,false,true,false,true,false,true,false,true,true,false,false,true,false,false,false,false,false,false,false,true,false,true,false,true,true,false,true,true,false,true,false,false,false,true,false,true,false,true,false,true,true,false,false,true,false,true,true,true,true,true,false,true,false,false,0,true,true,true,false,true,false,false,false,false,false,false,false,true,false,true,true,true,true,false,false,true,true,true,true,true,true,false,true,true,false,false,0,true,true,true,false,false,false,false,false,false,false,false,false,true,false,true,0,true,true,0,0,false,true,false,true,false,true,true,0,false,0,true,0,true,true,true,true,0,0,false,true,false,false,false,false,true,false,false,0,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,null,null,null,null,null,null,null,true,true,true,true,true]
+            victims: 10
+        }
+        {
+            width: 16
+            height: 16
+            data: [true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,0,0,0,0,0,0,0,0,0,0,0,0,0,0,true,true,0,true,true,true,true,true,0,true,0,true,true,true,true,0,true,true,false,false,false,false,false,0,0,true,false,true,true,true,true,0,true,true,false,true,true,true,true,true,false,true,false,true,true,true,true,0,true,true,false,false,0,false,0,false,false,true,false,false,0,false,false,0,true,true,true,true,0,true,true,true,false,true,true,true,true,true,true,false,true,true,false,false,0,false,false,false,false,0,0,false,0,0,false,false,true,true,false,true,0,true,true,true,false,true,0,true,true,true,true,false,true,true,false,false,0,false,0,false,false,true,0,false,0,0,false,0,true,true,true,true,0,true,true,true,false,true,0,true,true,true,true,true,true,true,false,false,false,false,false,true,false,0,0,0,0,0,false,0,true,true,0,true,true,true,false,true,0,true,true,true,true,true,true,0,true,true,0,0,false,true,false,true,false,true,true,0,0,0,true,0,true,true,true,true,0,0,false,true,false,false,false,false,true,false,false,0,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,null,null,null,null,null,null,null,true,true,true,true,true]
+            victims: 7
+        }
+        {
+            width: 16
+            height: 16
+            data: [true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,false,false,false,false,false,false,false,false,false,true,false,false,false,false,true,true,false,true,true,true,true,true,true,false,true,true,true,true,true,false,true,true,false,false,true,false,false,false,false,false,true,false,false,false,true,false,true,true,false,true,true,false,true,true,true,true,true,true,true,false,true,false,true,true,false,true,true,false,false,false,false,false,true,false,false,false,true,false,true,true,false,true,true,true,true,true,true,false,true,false,true,true,true,false,true,true,false,true,true,false,false,false,false,false,true,false,true,false,false,false,true,true,false,true,true,false,true,true,true,true,true,false,true,true,true,true,true,true,false,true,true,false,true,false,false,false,false,false,false,false,false,false,true,true,false,true,true,false,true,true,true,true,true,false,true,true,true,false,true,true,false,true,true,false,false,false,false,false,true,false,true,false,true,false,true,true,false,true,true,true,true,true,true,false,true,false,false,false,true,false,true,true,false,false,false,false,false,false,true,false,true,true,true,true,true,false,true,true,true,false,true,false,true,false,true,false,false,false,false,false,false,false,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,null,null,null,null,null,null,null,true,true,true,true,true]
+            victims: 7
+        }
+        {
+            width: 16
+            height: 16
+            data: [true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,0,0,0,0,0,0,0,0,0,0,0,0,0,0,true,true,0,false,false,false,false,false,false,false,false,false,false,false,false,0,true,true,false,false,false,false,false,false,false,false,false,false,false,false,false,0,true,true,false,false,false,false,false,false,false,false,false,false,false,false,false,0,true,true,false,false,false,false,false,false,false,false,false,false,false,false,false,0,true,true,false,false,false,false,false,false,false,false,false,false,false,false,false,false,true,true,false,false,false,false,false,false,true,false,false,false,false,false,false,false,true,true,false,false,false,false,false,false,false,false,false,false,false,false,false,false,true,true,false,false,false,false,false,false,false,false,false,false,false,false,false,false,true,true,false,false,false,false,false,false,false,false,false,false,false,false,false,false,true,true,false,false,false,false,false,false,false,false,false,false,false,false,false,false,true,true,false,false,false,false,false,false,false,false,false,false,false,false,false,0,true,true,false,false,false,false,false,false,false,false,false,false,false,false,false,0,true,true,false,false,false,false,false,false,false,false,false,false,false,false,false,0,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,null,null,null,null,null,null,null,true,true,true,true,true]
+            victims: 20
+        }
+    ]
+
+    level_index = 0
+    level = window.level = levels[0]
     player = {x: 7, y: 7}
-
     victims = []
-    for x in [0...7]
+    for x in [0...level.victims]
         victims.push randomVictim(victims, level)
+
+    nextLevel = (newlevel) ->
+        level = window.level = newlevel
+        player = {x: 7, y: 7}
+        victims = []
+        for x in [0...level.victims]
+            victims.push randomVictim(victims, level)
 
     update = () ->
         paths = pathSearch player, level
@@ -50,6 +90,10 @@ window.onload = () ->
                 victims.splice(i, 1)
                 continue
             i += 1
+        if victims.length == 0
+            level_index = (level_index + 1) % levels.length
+            nextLevel(levels[level_index])
+
 
     mouse = {x: 0, y: 0, down:false}
     canvas.onmousemove = (ev) ->
@@ -63,13 +107,10 @@ window.onload = () ->
             mouse.x = (x - (rect.width - rect.height) / 2.0) / rect.height
             mouse.y = y / rect.height
 
-        if mouse.down
+        if location.hash == '#edit' and mouse.down
             x = Math.floor(mouse.x * tw)
             y = Math.floor(mouse.y * tw)
             level.data[y * tw + x] = not ev.shiftKey
-
-        #player.x = Math.min(Math.max(Math.floor(mouse.x * tw), 0), tw-1)
-        #player.y = Math.min(Math.max(Math.floor(mouse.y * tw), 0), tw-1)
 
     canvas.onmousedown = () ->
         mouse.down = true
@@ -122,6 +163,12 @@ window.onload = () ->
         ctx.fill()
 
         ctx.restore()
+
+
+        ctx.fillStyle = 'white'
+        ctx.font = "20px sans-serif"
+        ctx.fillText("level #{level_index+1}", 2, 20)
+
         requestAnimationFrame draw
     setInterval update, 1000/6.0
     setInterval updatePlayer, 1000/8.0
