@@ -55,7 +55,7 @@ window.onload = () ->
         }
     ]
 
-    level_index = 4
+    level_index = 0
     level = window.level = levels[level_index]
     player = {x: 7, y: 7}
     victims = []
